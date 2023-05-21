@@ -1,7 +1,9 @@
-const User = require('../models/userModel.js');
 const asyncHandler = require('express-async-handler');
-const generateToken = require('../utils/generateToken.js');
 const jwtDecode = require('jwt-decode');
+
+const User = require('../models/userModel.js');
+const generateToken = require('../utils/generateToken.js');
+const joiSchema = require('../utils/joiSchema.js');
 
 // GETTING ALL THE USERS
 const getUsers = asyncHandler(async (req, res) => {
@@ -29,8 +31,8 @@ const authUser = asyncHandler(async (req, res) => {
   if (user && (await user.matchPassword(password))) {
     // const { password, ...rest } = user;
     // const userInfo = Object.assign({}, { ...rest });
-    const { firstName, lastName, email, role } = user;
-    const userInfo = { firstName, lastName, email, role };
+    const { firstName, lastName, email, phone, role } = user;
+    const userInfo = { firstName, lastName, email, phone, role };
 
     const token = generateToken(user);
     const decodedToken = jwtDecode(token);
@@ -52,7 +54,7 @@ const authUser = asyncHandler(async (req, res) => {
 
 // GETTING USER REGISTERED
 const registerUser = asyncHandler(async (req, res) => {
-  const { firstName, lastName, email, role, password } = req.body;
+  const { firstName, lastName, email, phone, role, password } = req.body;
   const userExits = await User.findOne({ email });
 
   if (userExits) {
@@ -62,6 +64,7 @@ const registerUser = asyncHandler(async (req, res) => {
 
   const userData = {
     email,
+    phone,
     firstName,
     lastName,
     password,
@@ -74,20 +77,21 @@ const registerUser = asyncHandler(async (req, res) => {
     const decodedToken = jwtDecode(token);
     const expiresAt = decodedToken.exp;
 
-    const { firstName, lastName, email, role } = user;
+    const { firstName, lastName, phone, email, role } = user;
 
     const userInfo = {
       firstName,
       lastName,
       email,
+      phone,
       role,
     };
 
-    sendWelcomeEmail({
-      email,
-      subject: `Thanks for signing up with us ${firstName}`,
-      message: 'You can start shopping now',
-    });
+    // sendWelcomeEmail({
+    //   email,
+    //   subject: `Thanks for signing up with us ${firstName}`,
+    //   message: 'You can start shopping now',
+    // });
     res.status(201).json({
       message: 'User created successfully!',
       token,
@@ -134,6 +138,8 @@ const removeUser = asyncHandler(async (req, res) => {
   const user = await User.findById(req.params.id);
 
   if (user) {
+    await User.deleteOne({ id: req.params.id });
+    res.status(200).json('User removed successfully!');
   }
 });
 

@@ -22,7 +22,6 @@ const createOrder = asyncHandler(async (req, res) => {
     shippingAddress,
     shippingPrice,
     itemsPrice,
-    taxPrice,
     paymentMethod,
     totalprice,
   } = req.body;
@@ -32,12 +31,11 @@ const createOrder = asyncHandler(async (req, res) => {
     throw new Error('No order items');
   } else {
     const order = new Order({
-      orderItems,
       user: req.user_id,
+      orderItems,
       shippingAddress,
       shippingPrice,
       itemsPrice,
-      taxPrice,
       paymentMethod,
       totalprice,
     });

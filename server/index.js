@@ -4,12 +4,12 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 
 const index = require('./src/routes/index');
-const dbConnect = require('./config/db.js');
-// const ImportData = require('./utils/dataImport.js');
-// const userRoutes = require('./routes/userRoute.js');
-// const productRoutes = require('./routes/productRoute.js');
-// const orderRoutes = require('./routes/orderRoute.js');
-const { notFound, errorHandler } = require('./middlewares/Errors.js');
+const dbConnect = require('./src/config/db.js');
+const { notFound, errorHandler } = require('./src/middlewares/Errors.js');
+
+// const userRoutes = require('./src/routes/userRoute.js');
+// const productRoutes = require('./src/routes/productRoute.js');
+// const orderRoutes = require('./src/routes/orderRoute.js');
 
 dotenv.config();
 const app = express();
@@ -21,16 +21,12 @@ app.use(bodyParser.json());
 dbConnect();
 app.use(cors());
 
-// app.use('/api/import', ImportData);
+// Routes
+index(app);
+
 // app.use('/api/users', userRoutes);
 // app.use('/api/products', productRoutes);
 // app.use('/api/orders', orderRoutes);
-// app.get('/api/config/paystack', (req, res) => {
-//   res.send(process.env.PAYMENT_CLIENT_ID);
-// });
-
-// Routes
-index(app);
 
 // Error Handlers
 app.use(notFound);

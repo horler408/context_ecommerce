@@ -17,15 +17,16 @@ const userSchema = mongoose.Schema(
       require: true,
       unique: true,
       lowercase: true,
-      validate(mail) {
-        if (!this.validate.isEmail(mail)) {
-          throw new Error({
-            message: 'Invalid Email',
-            statusCode: responseStatusCodes.BAD_REQUEST,
-          });
-        }
-      },
+      // validate(mail) {
+      //   if (!this.validate.isEmail(mail)) {
+      //     throw new Error({
+      //       message: 'Invalid Email',
+      //       statusCode: responseStatusCodes.BAD_REQUEST,
+      //     });
+      //   }
+      // },
     },
+    phone: { type: String, required: true, default: 08030000600 },
     role: {
       type: String,
       require: true,
