@@ -1,8 +1,17 @@
-import React, { useState, createContext } from 'react';
+import React, {
+  useState,
+  createContext,
+  useReducer,
+  useEffect,
+  useContext,
+} from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const AuthContext = createContext();
-const { Provider } = AuthContext;
+import { cartReducer } from './Reducers';
+import axios from 'axios';
+
+const Context = createContext();
+const { Provider } = Context;
 
 const AuthProvider = ({ children }) => {
   //   const navigate = useNavigate();
@@ -39,10 +48,17 @@ const AuthProvider = ({ children }) => {
     setAuthState({ token: null, userInfo: {}, expiresAt: null });
     // navigate('/login');
   };
+
+  const [cartState, dispatch] = useReducer(cartReducer, {
+    cart: [],
+  });
+
   return (
     <div>
       <Provider
         value={{
+          cartState,
+          dispatch,
           authState,
           setAuthState: (authInfo) => setAuthInfo(authInfo),
           isAuthenticated,
@@ -56,4 +72,8 @@ const AuthProvider = ({ children }) => {
   );
 };
 
-export { AuthContext, AuthProvider };
+export { Context, AuthProvider };
+
+export const ContextState = () => {
+  return useContext(Context);
+};

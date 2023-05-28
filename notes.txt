@@ -1,0 +1,21 @@
+//Repo Name
+context_ecommerce
+
+//Register 
+firstName, lastName, email, phone, role, password
+
+//User login
+message, token, userInfo, expiresAt,
+userInfo:firstName,lastName,email,role,
+
+//Login credentials
+email, password
+
+//Products
+name,image,description,reviews{},ratings,numReviews,price,countInStock
+
+//Review
+name, ratings,comment
+
+//Order
+orderItems[],shippingAddress,paymentMethod,paymentResult,shippingPrice,totalPrice,paidAt,deliveredAt
